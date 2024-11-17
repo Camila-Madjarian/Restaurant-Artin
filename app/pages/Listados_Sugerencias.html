@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugerencias de platos</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="Menú.html">Menú</a></li>
+                <li><a href="Ubicacion.html">Ubicación</a></li>
+                <li><a href="Reservas.html">Reservas</a></li>
+                <li><a href="Contacto.html">Contacto</a></li>
+                <li><a href="Registrarse.html">Registrarse</a></li>
+                <li><a href="Sugerencias de platos.html">Sugerencias</a></li>
+            </ul>
+        </nav>
+
+        <div class="hero">
+            <h1>Restaurante Artin</h1>
+            <p>Disfruta de lo mejor de la gastronomía</p>
+        </div>
+    </header>
+
+
+    <div class="form-container">
+        <script>
+            let suggestions = [];
+            let editIndex = null;
+    
+            // Cargar sugerencias guardadas al iniciar
+            document.addEventListener('DOMContentLoaded', () => {
+                const savedSuggestions = localStorage.getItem('suggestions');
+                if (savedSuggestions) {
+                    suggestions = JSON.parse(savedSuggestions);
+                    displaySuggestions();
+                }
+            });
+    
+            function addSuggestion() {
+                const id = document.getElementById("id").value;
+                const name = document.getElementById("name").value;
+                const description = document.getElementById("description").value;
+    
+                if (id && name && description) {
+                    if (editIndex !== null) {
+                        // Editar sugerencia existente
+                        suggestions[editIndex] = { id, name, description };
+                        editIndex = null;
+                    } else {
+                        // Agregar nueva sugerencia
+                        suggestions.push({ id, name, description });
+                    }
+                    // Guardar sugerencias en localStorage
+                    localStorage.setItem('suggestions', JSON.stringify(suggestions));
+                    document.getElementById("suggestion-form").reset();
+                    displaySuggestions();
+                } else {
+                    alert("Por favor, completa todos los campos.");
+                }
+            }
+    
+            function displaySuggestions() {
+                const list = document.getElementById("suggestion-list");
+                list.innerHTML = "";
+    
+                suggestions.forEach((suggestion, index) => {
+                    const li = document.createElement("li");
+                    li.textContent = `ID: ${suggestion.id}, Plato: ${suggestion.name}, Descripción: ${suggestion.description}`;
+    
+                    // Botón de Editar
+                    const editButton = document.createElement("button");
+                    editButton.textContent = "Editar";
+                    editButton.onclick = () => editSuggestion(index);
+                    li.appendChild(editButton);
+    
+                    // Botón de Eliminar
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Eliminar";
+                    deleteButton.onclick = () => deleteSuggestion(index);
+                    li.appendChild(deleteButton);
+    
+                    list.appendChild(li);
+                });
+            }
+    
+            function editSuggestion(index) {
+                const suggestion = suggestions[index];
+                document.getElementById("id").value = suggestion.id;
+                document.getElementById("name").value = suggestion.name;
+                document.getElementById("description").value = suggestion.description;
+                editIndex = index;
+            }
+    
+            function deleteSuggestion(index) {
+                suggestions.splice(index, 1);
+                // Actualizar localStorage después de eliminar
+                localStorage.setItem('suggestions', JSON.stringify(suggestions));
+                displaySuggestions();
+            }
+        </script>
+    
+        <main>
+            <h1>Sugerencias de Platos</h1>
+            <form id="suggestion-form" onsubmit="event.preventDefault(); addSuggestion();">
+                <label for="id">ID:</label>
+                <input type="text" id="id" required>
+                <label for="name">Nombre del Plato:</label>
+                <input type="text" id="name" required>
+                <label for="description">Descripción:</label>
+                <input type="text" id="description" required>
+                <button type="submit">Agregar Sugerencia</button>
+            </form>
+    
+            <h2>Lista de Sugerencias</h2>
+            <ul id="suggestion-list"></ul>
+        </main>
+    </div>
+    
+</main>
+</div>
+
+
+
+
+
+<footer>
+    <ul>
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="#ubicacion">Ubicación</a></li>
+        <li><a href="#reservas">Reservas</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a href="#trabaja-con-nosotros">Trabaja con Nosotros</a></li>
+    </ul>
+    <p>Gracias por visitarnos. &copy; 2024 Restaurante Artin</p>
+</footer>
+
+
+</body>
+</html>
